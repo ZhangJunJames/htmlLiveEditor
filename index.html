@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+        }
+        .main {
+            display: flex;
+        }
+
+        .side {
+            flex: auto;
+        }
+        .gap{
+            width: 10px;
+        }
+        textarea,
+        iframe {
+            border: 1px solid #400040;
+            height: 600px;
+            width: 100%;
+            border-radius: 1%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="side">
+            <textarea name="sourceCode" id="sourceCode"></textarea>
+        </div>
+        <div class="gap"></div>
+        <div class="side">
+            <iframe name="targetCode" id="targetCode"> </iframe>
+        </div>
+    </div>
+    <button onclick="runCode();">
+        run
+    </button>
+
+    <script>
+        const codePanel = document.getElementById('sourceCode');
+        function runCode() {
+            var content = codePanel.value;
+            var iframe = document.getElementById('targetCode');
+            iframe = (iframe.contentWindow) ? iframe.contentWindow : (iframe.contentDocument) ? iframe.contentDocument.document :
+                iframe.contentDocument;
+
+            iframe.document.open();
+            iframe.document.write(content);
+            iframe.document.close();
+            return false;
+        }
+
+
+        const btn = document.querySelector("button");
+
+        btn.addEventListener("click", () => {
+            runCode();
+        });
+
+
+        codePanel.addEventListener('keyup', () => {
+            runCode();
+        })
+
+        codePanel.addEventListener("paste", function (e) {
+            e.preventDefault();
+            var text = e.clipboardData.getData("text/plain");
+            document.execCommand("insertText", false, text);
+            runCode();
+        });
+        // runCode();
+    </script>
+</body>
+
+</html>
